@@ -35,14 +35,16 @@ namespace Banco
                     break;
             }
             novaConta.Titular = new Cliente(textoTitular.Text);
-            novaConta.Numero = Convert.ToInt32(textoNumero.Text);
             formPrincipal.AdicionaConta(novaConta);
+            textoNumero.Text = Convert.ToString(Conta.ProximoNumero());
+            textoTitular.Text = "";
         }
 
         private void FormCadastroConta_Load(object sender, EventArgs e)
         {
             string[] tiposDeConta = { "Conta Corrente", "Conta Poupança" };
             comboTipoDeContas.Items.AddRange(tiposDeConta);
+            textoNumero.Text = Convert.ToString(Conta.ProximoNumero());
         }
     }
 }

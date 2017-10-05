@@ -12,32 +12,26 @@ namespace Banco
             Tipo = "Conta Corrente";
         }
         public ContaCorrente(int numero) : base(numero) { }
-        public override bool Saca(double valorParaSacar)
+        public override void Saca(double valorParaSacar)
         {
             //base.Saca(valorParaSacar + 0.10);
+            if(valorParaSacar < 0)
+            {
+                throw new ArgumentException();
+            }
             if (valorParaSacar <= Saldo)
             {
                 Saldo -= valorParaSacar + 0.10;
-                return true;
-            }
-            else
+            } else
             {
-                return false;
+                throw new SaldoInsuficienteException();
             }
         }
 
-        public override bool Deposita(double valorParaDepositar)
+        public override void Deposita(double valorParaDepositar)
         {
             //base.Deposita(valorParaDepositar - 0.05);
-            if (valorParaDepositar > 0)
-            {
-                Saldo += valorParaDepositar - 0.05;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            base.Deposita(valorParaDepositar - 0.05);
 
         }
 

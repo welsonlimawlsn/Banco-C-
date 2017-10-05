@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace Banco
 {
@@ -8,10 +9,12 @@ namespace Banco
         public double Saldo { get; protected set; }
         public Cliente Titular { get; set; }
         public string Tipo { get; protected set; }
+        private static int numeroDeContas;
 
         public Conta()
         {
-
+            numeroDeContas++;
+            Numero = numeroDeContas;
         }
 
         public Conta(int numero)
@@ -19,21 +22,28 @@ namespace Banco
             Numero = numero;
         }
 
-        public abstract bool Deposita(double valorParaDepositar);
-
-        public abstract bool Saca(double valorParaSacar);
-
-        public bool Transfere(Conta destino, double valorDoDeposito)
+        public virtual void Deposita(double valorParaDepositar)
         {
-            if (Saca(valorDoDeposito))
+            if (valorParaDepositar > 0)
             {
-                destino.Deposita(valorDoDeposito);
-                return true;
-            }
-            else
+                Saldo += valorParaDepositar;
+            } else
             {
-                return false;
+                throw new ArgumentException();
             }
+        }
+
+        public abstract void Saca(double valorParaSacar);
+
+        public void Transfere(Conta destino, double valorDoDeposito)
+        {
+            Saca(valorDoDeposito);
+            destino.Deposita(valorDoDeposito);
+        }
+
+        public static int ProximoNumero()
+        {
+            return numeroDeContas + 1;
         }
     }
 }

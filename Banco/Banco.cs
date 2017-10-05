@@ -46,31 +46,31 @@ namespace Banco
 
         private void botaoDepositar_Click(object sender, EventArgs e)
         {
-            double valorDigitado = Convert.ToDouble(textoValor.Text);
-            if (contaSelecionada.Deposita(valorDigitado))
+            try
             {
-                MessageBox.Show("Sucesso!");
+                double valorDigitado = Convert.ToDouble(textoValor.Text);
+                contaSelecionada.Deposita(valorDigitado);
+                textoSaldo.Text = Convert.ToString(contaSelecionada.Saldo);
             }
-            else
+            catch (ArgumentException ex)
             {
-                MessageBox.Show("Falhou!");
+                MessageBox.Show("Não é possivel depositar um valor negativo.");
             }
-            textoSaldo.Text = Convert.ToString(contaSelecionada.Saldo);
-            
         }
 
         private void BotaoSacar_Click(object sender, EventArgs e)
         {
-            double valorDigitado = Convert.ToDouble(textoValor.Text);
-            if (contaSelecionada.Saca(valorDigitado))
+            try { 
+                double valorDigitado = Convert.ToDouble(textoValor.Text);
+                contaSelecionada.Saca(valorDigitado);
+                textoSaldo.Text = Convert.ToString(contaSelecionada.Saldo);
+            } catch(ArgumentException ex)
             {
-                MessageBox.Show("Sucesso!");
-            }
-            else
+                MessageBox.Show("Não se pode sacar valores negativos");
+            } catch(SaldoInsuficienteException ex)
             {
-                MessageBox.Show("Falhou!");
+                MessageBox.Show("Saldo Insuficiente");
             }
-            textoSaldo.Text = Convert.ToString(contaSelecionada.Saldo);
         }
 
         private void comboContas_SelectedIndexChanged(object sender, EventArgs e)
@@ -91,15 +91,7 @@ namespace Banco
         {
             if(contaSelecionada != null && contaSelecionadaDestino != null)
             {
-                if (contaSelecionada.Transfere(contaSelecionadaDestino, Convert.ToDouble(textoValor.Text)))
-                {
-                    textoSaldo.Text = Convert.ToString(contaSelecionada.Saldo);
-                    MessageBox.Show("Sucesso!");
-                }
-                else
-                {
-                    MessageBox.Show("Falhou!");
-                }
+                contaSelecionada.Transfere(contaSelecionadaDestino, Convert.ToDouble(textoValor.Text));
             }
             else
             {

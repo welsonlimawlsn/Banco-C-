@@ -12,30 +12,20 @@ namespace Banco
             Tipo = "Conta Poupança";
         }
         public ContaPoupanca(int numero) : base(numero) { }
-        public override bool Saca(double valorParaSacar)
+        public override void Saca(double valorParaSacar)
         {
             //base.Saca(valorDoSaque + 0.10);
+            if (valorParaSacar < 0)
+            {
+                throw new ArgumentException();
+            }
             if (valorParaSacar <= Saldo)
             {
-                Saldo -= valorParaSacar + .10;
-                return true;
+                Saldo -= valorParaSacar + 0.10;
             }
             else
             {
-                return false;
-            }
-        }
-
-        public override bool Deposita(double valorParaDepositar)
-        {
-            if(valorParaDepositar > 0)
-            {
-                Saldo += valorParaDepositar;
-                return true;
-            }
-            else
-            {
-                return false;
+                throw new SaldoInsuficienteException();
             }
         }
     }
